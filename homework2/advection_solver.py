@@ -68,9 +68,13 @@ def upwind_scheme(u, c, dx, dt):
     if c > 0:  # Upwind direction
         for i in range(1, n):
             u_new[i] = u[i] - c * dt / dx * (u[i] - u[i-1])
+        # Boundary condition: inflow at left boundary (set to zero)
+        u_new[0] = 0.0
     else:
         for i in range(n-1):
             u_new[i] = u[i] - c * dt / dx * (u[i+1] - u[i])
+        # Boundary condition: inflow at right boundary (set to zero)
+        u_new[-1] = 0.0
     
     return u_new
 
@@ -97,6 +101,10 @@ def lax_wendroff_scheme(u, c, dx, dt):
         u_new[i] = (u[i] - 
                     c * dt / (2*dx) * (u[i+1] - u[i-1]) + 
                     c**2 * dt**2 / (2*dx**2) * (u[i+1] - 2*u[i] + u[i-1]))
+    
+    # Boundary conditions: set inflow boundaries to zero
+    u_new[0] = 0.0
+    u_new[-1] = 0.0
     
     return u_new
 
